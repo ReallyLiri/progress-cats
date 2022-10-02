@@ -6,6 +6,8 @@ import { ProgressBar } from "src/components/ProgressBar";
 import { AddBar } from "src/components/AddBar";
 import { ProgressBarDefinition } from './model/ProgressBarDefinition';
 import { loadFromStorage, saveToStorage } from './util/storage';
+import { Cat } from "src/components/Cat";
+import { Row } from "src/components/Row";
 
 
 const Container = styled.div`
@@ -71,7 +73,15 @@ function App() {
 
   return (
     <Container>
-      <Title>Progress Cats</Title>
+      {
+        Object.keys(bars).length === 0 ?
+          <Row>
+            <Cat/>
+            <Title>Progress Cats</Title>
+            <Cat/>
+          </Row> :
+          <Title>Progress Cats</Title>
+      }
       <Body>
         {
           Object.values(bars).map(bar =>

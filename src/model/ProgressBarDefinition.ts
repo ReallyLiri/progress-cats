@@ -5,4 +5,5 @@ export type ProgressBarDefinition = {
   fullValue: number;
   defaultDelta: number;
   value: number;
+  color: string;
 }

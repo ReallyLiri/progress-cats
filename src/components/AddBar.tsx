@@ -5,6 +5,7 @@ import React, { useCallback, useState } from "react";
 import { v4 as uuid } from 'uuid';
 import { Input, InputNumber } from 'antd';
 import styled from "styled-components";
+import { Cats, Theme } from "src/util/theme";
 
 const Wrapper = styled.div`
   height: fit-content;
@@ -14,7 +15,7 @@ const Wrapper = styled.div`
   border-radius: 16px;
   display: flex;
   flex-direction: column;
-  background-color: #eaeaea;
+  background-color: ${ Theme.BACKGROUND };
 `
 
 const Label = styled.div`
@@ -32,7 +33,8 @@ const getEmptyBar = (): ProgressBarDefinition => ({
   id: uuid(),
   name: "New progress bar",
   unit: "-",
-  value: 0
+  value: 0,
+  color: Cats.getNextCatColor()
 })
 
 export const AddBar = ({add, cancel}: Props) => {
@@ -46,7 +48,7 @@ export const AddBar = ({add, cancel}: Props) => {
       <Label>Name</Label>
       <Input value={ bar.name } onChange={ (e) => setProperty("name", e.target.value) }/>
       <Label>Target</Label>
-      <div><InputNumber min={1} value={bar.fullValue} onChange={(value) => value && setProperty("fullValue", value)}/></div>
+      <div><InputNumber min={ 1 } value={ bar.fullValue } onChange={ (value) => value && setProperty("fullValue", value) }/></div>
       <Label>Unit</Label>
       <Input value={ bar.unit } onChange={ (e) => setProperty("unit", e.target.value) }/>
     </Row>
@@ -55,12 +57,12 @@ export const AddBar = ({add, cancel}: Props) => {
         add(bar);
         setBar(() => getEmptyBar())
       }
-      } color="#FFA500"/>
+      } color={ Theme.ACTION_MAIN }/>
       <Button label="Cancel" onClick={ () => {
         cancel();
         setBar(() => getEmptyBar())
       }
-      } color="#a5a5a5"/>
+      } color={ Theme.ACTION_GRAY }/>
     </Row>
   </Wrapper>
 }
