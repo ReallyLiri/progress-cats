@@ -39,7 +39,7 @@ export const AddBar = ({add, cancel}: Props) => {
   const [bar, setBar] = useState<ProgressBarDefinition>(getEmptyBar())
   const setProperty = useCallback((name: keyof ProgressBarDefinition, value: string | number) => {
     setBar(b => ({...b, [name]: value}))
-  }, [setBar])
+  }, [setBar]);
 
   return <Wrapper>
     <Row>

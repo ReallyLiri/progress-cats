@@ -3,8 +3,7 @@ import styled from "styled-components";
 import { ProgressBarDefinition } from "src/model/ProgressBarDefinition";
 import { plural } from "pluralize";
 import { Row } from "./Row";
-import { InputNumber } from "antd";
-import { useProgressBars } from "src/hooks/progressBars";
+import { InputNumber, Modal } from "antd";
 
 const percentage = (value: number, fullValue: number) => {
   const portion = value / fullValue
@@ -23,7 +22,7 @@ const Container = styled.div`
   width: 100%;
   background-color: #a5a5a5;
   border-radius: 50px;
-  margin: 50px;
+  margin: 8px;
 `
 
 const Filler = styled.div<{ percentage: number }>`
@@ -59,30 +58,39 @@ const ActionWrapper = styled.div`
 
 const Action = styled.div`
   cursor: pointer;
+  display: flex;
   text-align: center;
+  align-items: center;
+  justify-content: center;
   margin: 2px;
+  padding-top: 3px;
   border-radius: 16px;
-  height: 20px;
-  width: 20px;
+  height: 24px;
+  width: 24px;
   background-color: #FFA500;
 `
 
+const Delete = styled.div`
+  cursor: pointer;
+  filter: grayscale(1);
+`
+
 type Props = {
-  barId: string
+  bar: ProgressBarDefinition,
+  updateBar: (id: string, value: number) => void,
+  removeBar: (id: string) => void
 }
 
-export const ProgressBar = ({barId}: Props) => {
-  const {barById, updateBar} = useProgressBars();
-  const [value, setValue] = useState<number>(barById(barId).value)
-  const bar = useMemo(() => barById(barId), [barId, barById]);
+export const ProgressBar = ({bar, updateBar, removeBar}: Props) => {
   const [delta, setDelta] = useState<number>(bar.defaultDelta);
+  const [isModalOpen, setIdModalOpen] = useState(false);
   const percentageValue = useMemo(
-    () => percentage(value, bar.fullValue),
-    [value, bar.fullValue]
+    () => percentage(bar.value, bar.fullValue),
+    [bar.value, bar.fullValue]
   );
 
   const updateValue = useCallback((add: boolean) => {
-    let nextValue = value + (add ? delta : -1 * delta)
+    let nextValue = bar.value + (add ? delta : -1 * delta)
     if (nextValue < 0) {
       nextValue = 0
     }
@@ -90,8 +98,7 @@ export const ProgressBar = ({barId}: Props) => {
       nextValue = bar.fullValue
     }
     updateBar(bar.id, nextValue)
-    setValue(nextValue)
-  }, [bar.id, bar.fullValue, value, delta, updateBar])
+  }, [bar.id, bar.fullValue, bar.value, delta, updateBar])
 
   return <Row gap={ 4 }>
     <Title>{ bar.name }</Title>
@@ -104,8 +111,16 @@ export const ProgressBar = ({barId}: Props) => {
     </Container>
     <StyledInputNumber value={ delta } onChange={ value => value && setDelta(value as number) }/>
     <ActionWrapper>
-      <Action title="Add" onClick={ () => updateValue(true) }>+</Action>
-      <Action title="Sub" onClick={ () => updateValue(false) }>-</Action>
+      <Action title="Add" onClick={ () => updateValue(true) }>➕</Action>
+      <Action title="Sub" onClick={ () => updateValue(false) }>➖</Action>
     </ActionWrapper>
+    <Delete title="Delete" onClick={ () => setIdModalOpen(true) }>❌</Delete>
+    <Modal title="Are you sure?"
+           open={ isModalOpen }
+           onOk={ () => {
+             setIdModalOpen(false);
+             removeBar(bar.id);
+           } } onCancel={ () => setIdModalOpen(false) }
+    >Deleting {bar.name} forever!</Modal>
   </Row>
 }
