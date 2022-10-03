@@ -6,10 +6,11 @@ import { v4 as uuid } from 'uuid';
 import { Input, InputNumber } from 'antd';
 import styled from "styled-components";
 import { Cats, Theme } from "src/util/theme";
+import { useIsMobile } from "src/util/isMobile";
 
 const Wrapper = styled.div`
   height: fit-content;
-  width: fit-content;
+  width: 100%;
   padding: 16px;
   gap: 16px;
   border-radius: 16px;
@@ -38,13 +39,14 @@ const getEmptyBar = (): ProgressBarDefinition => ({
 })
 
 export const AddBar = ({add, cancel}: Props) => {
+  const {isMobile} = useIsMobile();
   const [bar, setBar] = useState<ProgressBarDefinition>(getEmptyBar())
   const setProperty = useCallback((name: keyof ProgressBarDefinition, value: string | number) => {
     setBar(b => ({...b, [name]: value}))
   }, [setBar]);
 
   return <Wrapper>
-    <Row>
+    <Row vertical={isMobile}>
       <Label>Name</Label>
       <Input value={ bar.name } onChange={ (e) => setProperty("name", e.target.value) }/>
       <Label>Target</Label>

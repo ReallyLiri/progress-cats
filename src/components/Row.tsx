@@ -1,9 +1,16 @@
 import styled from "styled-components";
 import { Center } from "src/components/Center";
 
-export const Row = styled.div<{gap?: number}>`
-  ${Center};
+export const Row = styled.div<{
+  gap?: number,
+  vertical?: boolean,
+  flex?: number,
+}>`
+  ${ Center };
+  width: 100%;
   justify-content: start;
-  flex-direction: row;
-  gap: ${({gap}) => gap || 20}px;
+  align-items: ${({vertical}) => vertical ? "start" : "center"};
+  flex-direction: ${ ({vertical}) => vertical ? "column" : "row" };
+  gap: ${ ({gap}) => gap || 20 }px;
+  flex: ${({flex}) => flex ?? "unset"};
 `
