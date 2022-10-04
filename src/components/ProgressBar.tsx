@@ -123,7 +123,6 @@ const ActionRow = styled(Row)<{isMobile: boolean}>`
 `
 
 const Assign = styled(Action)`
-  padding-top: 4px;
   padding-right: 1px;
   font-size: 20px;
   color: #635342;

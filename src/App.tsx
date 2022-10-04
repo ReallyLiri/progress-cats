@@ -11,40 +11,44 @@ import { Row } from "src/components/Row";
 import { useIsMobile } from "src/util/isMobile";
 
 
-const Container = styled.div<{isMobile: boolean}>`
+const Container = styled.div<{ isMobile: boolean }>`
   ${ Center };
   height: 100vh;
   width: 100vw;
   background-color: black;
   flex-direction: column;
-  gap: ${({isMobile}) => isMobile ? 10 : 40 }px;
+  gap: ${ ({isMobile}) => isMobile ? 10 : 40 }px;
 `
 
-const TitleStyle = styled.div<{isMobile: boolean}>`
+const TitleStyle = styled.div<{ isMobile: boolean }>`
   color: white;
-  font-size: ${({isMobile}) => isMobile ? 24 : 40}px;
+  font-size: ${ ({isMobile}) => isMobile ? 24 : 40 }px;
   font-weight: bold;
 `
 
-const Title = ({isMobile}: {isMobile: boolean}) =>
-  <TitleStyle isMobile={isMobile}>Progress Cats</TitleStyle>
+const Title = ({isMobile}: { isMobile: boolean }) =>
+  <TitleStyle isMobile={ isMobile }>Progress Cats</TitleStyle>
 
-const Body = styled.div<{isMobile: boolean}>`
-  height: ${({isMobile}) => isMobile ? 92 : 75}vh;
-  width: ${({isMobile}) => isMobile ? 94 : 75}vw;
+const TitleRow = styled(Row)`
+  justify-content: center;
+`
+
+const Body = styled.div<{ isMobile: boolean }>`
+  height: ${ ({isMobile}) => isMobile ? 92 : 75 }vh;
+  width: ${ ({isMobile}) => isMobile ? 94 : 75 }vw;
   background-color: white;
   border-radius: 40px;
-  padding: ${({isMobile}) => isMobile ? 10 : 40}px;
+  padding: ${ ({isMobile}) => isMobile ? 10 : 40 }px;
   overflow-y: auto;
 `
 
-const Item = styled.div<{isMobile: boolean}>`
+const Item = styled.div<{ isMobile: boolean }>`
   :first-child {
-    margin-top: ${({isMobile}) => isMobile ? 16 : 0}px;
+    margin-top: ${ ({isMobile}) => isMobile ? 16 : 0 }px;
   }
-  
+
   :not(:first-child) {
-    margin-top: ${({isMobile}) => isMobile ? 32 : 16}px;
+    margin-top: ${ ({isMobile}) => isMobile ? 32 : 16 }px;
   }
 
   :last-child {
@@ -88,25 +92,27 @@ function App() {
   }, [isAdding]);
 
   return (
-    <Container isMobile={isMobile}>
-      {
-        Object.keys(bars).length === 0 ?
-          <Row>
-            <Cat/>
-            <Title isMobile={isMobile}/>
-            <Cat/>
-          </Row> :
-          <Title isMobile={isMobile}/>
-      }
-      <Body isMobile={isMobile} ref={ref}>
+    <Container isMobile={ isMobile }>
+      <TitleRow>
+        {
+          Object.keys(bars).length === 0
+            ? <>
+              <Cat/>
+              <Title isMobile={ isMobile }/>
+              <Cat/>
+            </>
+            : <Title isMobile={ isMobile }/>
+        }
+      </TitleRow>
+      <Body isMobile={ isMobile } ref={ ref }>
         {
           Object.values(bars).map(bar =>
-            <Item key={ bar.id } isMobile={isMobile}>
+            <Item key={ bar.id } isMobile={ isMobile }>
               <ProgressBar bar={ bar } removeBar={ removeBar } updateBar={ updateBar }/>
             </Item>
           )
         }
-        <Item isMobile={isMobile}>
+        <Item isMobile={ isMobile }>
           {
             isAdding
               ? <AddBar add={ (bar: ProgressBarDefinition) => {
